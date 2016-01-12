@@ -35,7 +35,24 @@ public class SeamCarving
 	}
 
 	public static void writepgm(int[][] image, String filename) {
-
+		try {
+			File file = new File(filename+".pgm");
+			Writer output = new BufferedWriter(new FileWriter(file));
+			StringBuilder sb = new StringBuilder();
+			sb.append("P2\n");
+			sb.append(image[0].length+"\t"+image.length+"\n");
+			sb.append("255\n");
+			
+			for (int height=0; height<image.length; height++){
+				for (int width=0; width<image[0].length; width++){
+					sb.append(image[height][width]+"\t");
+				}	
+			}
+			output.write(sb.toString());
+			output.close();
+		} catch(Throwable t) {
+			t.printStackTrace(System.err) ;
+		}
 	}
 	
 	public static int[][] interest (int[][] image) {
@@ -54,4 +71,5 @@ public class SeamCarving
 		
 		return res;
 	}
+	
 }

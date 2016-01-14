@@ -4,6 +4,8 @@ class Edge
    int from;
    int to;
    int cost;
+   Edge parent;
+   
    Edge(int x, int y, int cost)
 	 {
 		this.from = x;

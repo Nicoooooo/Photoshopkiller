@@ -12,5 +12,7 @@ public class InterestTest {
 		
 		SeamCarving.writepgm(tab, nom+"_interest");
 		Graph g = SeamCarving.tograph(tab);
+		
+		//SeamCarving.Dijkstra(g, 0, SeamCarving.getEdgeId(tab[0].length, tab[0].length, tab.length)+1);
 	}
 }

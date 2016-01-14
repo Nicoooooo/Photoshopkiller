@@ -109,34 +109,38 @@ public class SeamCarving
 		/**
 		 * Visite de tous les noeuds
 		 */
-		visite(g,s,t);
+		Edge fin = visite(g,s,t,null);
+		
+		path.add(fin);
+		while(fin.parent != null) {
+			fin = fin.parent;
+			path.add(fin);
+		}
 		
 		return path;
 	}
 	
-	public static void visite(Graph g, int e, int t) {
+	public static Edge visite(Graph g, int e, int t, Edge last) {
+		if(e == t) {
+			return last;
+		}
+		
 		Iterable<Edge> nonVisite = g.adj(e);
 		
 		int min = -1;
-		int minId = -1;
-		boolean stop = false;
+		Edge minE = null;
 		for(Edge ed : nonVisite) {
 			if(g.getValue(ed.to) == -1 || g.getValue(ed.from) + ed.cost < g.getValue(ed.to)) {
 				g.setValue(ed.to,g.getValue(ed.from)+ed.cost);
+				ed.parent = last;
 			}
 			
 			if(g.getValue(ed.to) < min || min == -1) {
 				min = g.getValue(ed.to);
-				minId = ed.to;
-			}
-			
-			if(e == t) {
-				stop = true;
+				minE = ed;
 			}
 		}
 		
-		if(!stop) {
-			visite(g,minId,t);
-		}
+		return visite(g,minE.to,t,minE);
 	}
 }

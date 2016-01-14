@@ -5,12 +5,12 @@ import photoshopkiller.algo.SeamCarving;
 
 public class InterestTest {
 	public InterestTest() {
-		int[][] tab = SeamCarving.readpgm("ex1.pgm");
+		String nom = "ex2";
+		int[][] tab = SeamCarving.readpgm(nom+".pgm");
 		
 		tab = SeamCarving.interest(tab);
 		
-		SeamCarving.writepgm(tab, "ex1_interest");
-		
+		SeamCarving.writepgm(tab, nom+"_interest");
 		Graph g = SeamCarving.tograph(tab);
 	}
 }

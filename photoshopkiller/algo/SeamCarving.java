@@ -78,25 +78,24 @@ public class SeamCarving
 	
 	public static Graph tograph(int[][] itr) {
 		int width = itr[0].length, height = itr.length;
-		Graph r = new Graph(1000*width*height+2);
-		
+		Graph r = new Graph(width*width+height*2);
 		for(int j = 0; j < width; j++) {
 			r.addEdge(new Edge(0,getEdgeId(width,j,0),0));
 		}
 		
 		for(int i = 0; i < width; i++) {
 			for(int j = 1; j < height - 1; j++) {
-				r.addEdge(new Edge(getEdgeId(width,i,j),getEdgeId(width,i,j+1),itr[i][j]));
+				r.addEdge(new Edge(getEdgeId(width,i,j),getEdgeId(width,i,j+1),itr[j][i]));
 				
 				if(i < width - 1) {
-					r.addEdge(new Edge(getEdgeId(width,i,j),getEdgeId(width,i+1,j+1),itr[i][j]));
+					r.addEdge(new Edge(getEdgeId(width,i,j),getEdgeId(width,i+1,j+1),itr[j][i]));
 				}
 				
 				if(i > 0) {
-					r.addEdge(new Edge(getEdgeId(width,i,j),getEdgeId(width,i-1,j+1),itr[i][j]));
+					r.addEdge(new Edge(getEdgeId(width,i,j),getEdgeId(width,i-1,j+1),itr[j][i]));
 				}
 			}
-			r.addEdge(new Edge(getEdgeId(width,i,height-1),getEdgeId(width,width,height)+1,itr[i][height-1]));
+			r.addEdge(new Edge(getEdgeId(width,i,height-1),getEdgeId(width,width,height)+1,itr[height-1][i]));
 		}
 		
 		return r;

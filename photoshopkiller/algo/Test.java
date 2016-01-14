@@ -59,9 +59,9 @@ class Test
 		dfs(g, 3);
 	 }
    
-   public static void main2(String[] args) {
+   public static void main(String[] args) {
 	   new photoshopkiller.tests.InterestTest();
-		testHeap();
-		testGraph();
+	   //testHeap();
+	   //testGraph();
 	 }
 }

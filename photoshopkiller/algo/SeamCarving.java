@@ -78,7 +78,7 @@ public class SeamCarving
 	
 	public static Graph tograph(int[][] itr) {
 		int width = itr[0].length, height = itr.length;
-		Graph r = new Graph(width*width+height*2,width,height);
+		Graph r = new Graph(width*width+height*2);
 		for(int j = 0; j < width; j++) {
 			r.addEdge(new Edge(0,getEdgeId(width,j,0),0));
 		}
@@ -104,14 +104,31 @@ public class SeamCarving
 	public static int[] Dijkstra(Graph g, int s, int t) {
 		int[] path = {};
 		
+		g.setValue(0, 0);
 		visite(g,0);
 		
 		return path;
 	}
 	
 	public static void visite(Graph g, int e) {
-		Iterable<Edge> adj = g.adj(e);
-		for(Edge ed : adj) {
+		Iterable<Edge> nonVisite = g.adj(e);
+		
+		int min = -1;
+		int minId = -1;
+		
+		for(Edge ed : nonVisite) {
+			if(g.getValue(ed.to) == -1 || g.getValue(ed.from) + ed.cost < g.getValue(ed.to)) {
+				g.setValue(ed.to,g.getValue(ed.from)+ed.cost);
+			}
+			
+			if(g.getValue(ed.to) < min || min == -1) {
+				min = g.getValue(ed.to);
+				minId = ed.to;
+			}
+		}
+		
+		if(minId != -1) {
+			visite(g,minId);
 		}
 	}
 }

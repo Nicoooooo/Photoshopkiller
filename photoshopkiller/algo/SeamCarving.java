@@ -101,21 +101,25 @@ public class SeamCarving
 		return r;
 	}
 	
-	public static int[] Dijkstra(Graph g, int s, int t) {
-		int[] path = {};
+	public static ArrayList<Edge> Dijkstra(Graph g, int s, int t) {
+		ArrayList<Edge> path = new ArrayList<Edge>();
 		
 		g.setValue(0, 0);
-		visite(g,0);
+		
+		/**
+		 * Visite de tous les noeuds
+		 */
+		visite(g,s,t);
 		
 		return path;
 	}
 	
-	public static void visite(Graph g, int e) {
+	public static void visite(Graph g, int e, int t) {
 		Iterable<Edge> nonVisite = g.adj(e);
 		
 		int min = -1;
 		int minId = -1;
-		
+		boolean stop = false;
 		for(Edge ed : nonVisite) {
 			if(g.getValue(ed.to) == -1 || g.getValue(ed.from) + ed.cost < g.getValue(ed.to)) {
 				g.setValue(ed.to,g.getValue(ed.from)+ed.cost);
@@ -125,10 +129,14 @@ public class SeamCarving
 				min = g.getValue(ed.to);
 				minId = ed.to;
 			}
+			
+			if(e == t) {
+				stop = true;
+			}
 		}
 		
-		if(minId != -1) {
-			visite(g,minId);
+		if(!stop) {
+			visite(g,minId,t);
 		}
 	}
 }

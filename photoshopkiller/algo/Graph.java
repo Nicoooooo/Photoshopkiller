@@ -6,10 +6,18 @@ public class Graph
 {
    private ArrayList<Edge>[] adj;
    private final int V;
+   private int[][] tab;
+   
    int E;
 @SuppressWarnings("unchecked")
-   public Graph(int N)
+   public Graph(int N, int w, int h)
 	 {
+		tab = new int[w][h];
+		for(int i = 0; i < w; i++) {
+			for(int j = 0; j < h; j++) {
+				tab[i][j] = -1;
+			}
+		}
 		this.V = N;
 		this.E = 0;
 		 adj = (ArrayList<Edge>[]) new ArrayList[N];
@@ -55,6 +63,14 @@ public class Graph
             }
         return list;
     }
+   
+   public int getValue(int i, int j) {
+	   return tab[i][j];
+   }
+   
+   public void setValue(int i, int j, int v) {
+	   tab[i][j] = v;
+   }
    
    
    public void writeFile(String s)

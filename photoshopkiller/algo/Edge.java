@@ -1,7 +1,7 @@
 package photoshopkiller.algo;
-class Edge
+public class Edge
 {
-   int from;
+   public int from;
    int to;
    int cost;
    Edge parent;

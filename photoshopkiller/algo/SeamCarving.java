@@ -73,7 +73,7 @@ public class SeamCarving
 	}
 	
 	public static int getEdgeId(int w, int x, int y) {
-		return w * x + y + 1;
+		return w * x + y + 2;
 	}
 	
 	public static Graph tograph(int[][] itr) {
@@ -84,7 +84,7 @@ public class SeamCarving
 		}
 		
 		for(int i = 0; i < width; i++) {
-			for(int j = 1; j < height - 1; j++) {
+			for(int j = 0; j < height - 1; j++) {
 				r.addEdge(new Edge(getEdgeId(width,i,j),getEdgeId(width,i,j+1),itr[j][i]));
 				
 				if(i < width - 1) {
@@ -95,7 +95,7 @@ public class SeamCarving
 					r.addEdge(new Edge(getEdgeId(width,i,j),getEdgeId(width,i-1,j+1),itr[j][i]));
 				}
 			}
-			r.addEdge(new Edge(getEdgeId(width,i,height-1),getEdgeId(width,width,height)+1,itr[height-1][i]));
+			r.addEdge(new Edge(getEdgeId(width,i,height-1),1,itr[height-1][i]));
 		}
 		
 		return r;
@@ -130,12 +130,13 @@ public class SeamCarving
 		int min = -1;
 		Edge minE = null;
 		for(Edge ed : nonVisite) {
+			boolean jamaisVisite = g.getValue(ed.to) == -1;
 			if(g.getValue(ed.to) == -1 || g.getValue(ed.from) + ed.cost < g.getValue(ed.to)) {
 				g.setValue(ed.to,g.getValue(ed.from)+ed.cost);
 				ed.parent = last;
 			}
 			
-			if(g.getValue(ed.to) < min || min == -1) {
+			if( jamaisVisite && (g.getValue(ed.to) < min || min == -1) ) {
 				min = g.getValue(ed.to);
 				minE = ed;
 			}

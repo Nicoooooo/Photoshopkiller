@@ -2,6 +2,7 @@ package photoshopkiller.tests;
 
 import photoshopkiller.algo.Graph;
 import photoshopkiller.algo.SeamCarving;
+import photoshopkiller.utils.ArrayUtils;
 
 public class InterestTest {
 	public InterestTest() {
@@ -13,6 +14,7 @@ public class InterestTest {
 		SeamCarving.writepgm(tab, nom+"_interest");
 		Graph g = SeamCarving.tograph(tab);
 		
-		//SeamCarving.Dijkstra(g, 0, SeamCarving.getEdgeId(tab[0].length, tab[0].length, tab.length)+1);
+		ArrayUtils.trace(SeamCarving.Dijkstra(g, 0, 1));
+		
 	}
 }

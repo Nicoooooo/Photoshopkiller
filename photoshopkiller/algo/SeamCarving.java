@@ -85,20 +85,18 @@ public class SeamCarving
 		}
 		
 		for(int i = 0; i < width; i++) {
-			for(int j = 1; j < height; j++) {
-				if(j < height - 1) {
-					r.addEdge(new Edge(getEdgeId(width,i,j),getEdgeId(width,i,j+1),itr[i][j]));
-				}
-				if(j < height - 1 && i < width - 1) {
+			for(int j = 1; j < height - 1; j++) {
+				r.addEdge(new Edge(getEdgeId(width,i,j),getEdgeId(width,i,j+1),itr[i][j]));
+				
+				if(i < width - 1) {
 					r.addEdge(new Edge(getEdgeId(width,i,j),getEdgeId(width,i+1,j+1),itr[i][j]));
 				}
-				if(j < height - 1 && i > 0) {
+				
+				if(i > 0) {
 					r.addEdge(new Edge(getEdgeId(width,i,j),getEdgeId(width,i-1,j+1),itr[i][j]));
 				}
-				if(j == height - 1) {
-					r.addEdge(new Edge(getEdgeId(width,i,j),getEdgeId(width,width,height)+1,itr[i][j]));
-				}
 			}
+			r.addEdge(new Edge(getEdgeId(width,i,height-1),getEdgeId(width,width,height)+1,itr[i][height-1]));
 		}
 		
 		return r;

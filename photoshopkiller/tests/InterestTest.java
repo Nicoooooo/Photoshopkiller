@@ -1,7 +1,7 @@
 package photoshopkiller.tests;
 
+import photoshopkiller.algo.Graph;
 import photoshopkiller.algo.SeamCarving;
-import photoshopkiller.utils.ArrayUtils;
 
 public class InterestTest {
 	public InterestTest() {
@@ -10,5 +10,7 @@ public class InterestTest {
 		tab = SeamCarving.interest(tab);
 		
 		SeamCarving.writepgm(tab, "ex1_interest");
+		
+		Graph g = SeamCarving.tograph(tab);
 	}
 }

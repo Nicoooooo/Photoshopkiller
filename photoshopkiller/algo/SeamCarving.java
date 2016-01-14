@@ -72,4 +72,35 @@ public class SeamCarving
 		return res;
 	}
 	
+	public static int getEdgeId(int w, int x, int y) {
+		return w * x + y + 1;
+	}
+	
+	public static Graph tograph(int[][] itr) {
+		int width = itr[0].length, height = itr.length;
+		Graph r = new Graph(1000*width*height+2);
+		
+		for(int j = 0; j < width; j++) {
+			r.addEdge(new Edge(0,getEdgeId(width,j,0),0));
+		}
+		
+		for(int i = 0; i < width; i++) {
+			for(int j = 1; j < height; j++) {
+				if(j < height - 1) {
+					r.addEdge(new Edge(getEdgeId(width,i,j),getEdgeId(width,i,j+1),itr[i][j]));
+				}
+				if(j < height - 1 && i < width - 1) {
+					r.addEdge(new Edge(getEdgeId(width,i,j),getEdgeId(width,i+1,j+1),itr[i][j]));
+				}
+				if(j < height - 1 && i > 0) {
+					r.addEdge(new Edge(getEdgeId(width,i,j),getEdgeId(width,i-1,j+1),itr[i][j]));
+				}
+				if(j == height - 1) {
+					r.addEdge(new Edge(getEdgeId(width,i,j),getEdgeId(width,width,height)+1,itr[i][j]));
+				}
+			}
+		}
+		
+		return r;
+	}
 }

@@ -6,15 +6,16 @@ import photoshopkiller.utils.ArrayUtils;
 
 public class InterestTest {
 	public InterestTest() {
-		String nom = "ex2";
+		String nom = "test";
 		int[][] tab = SeamCarving.readpgm(nom+".pgm");
 		
 		tab = SeamCarving.interest(tab);
 		
 		SeamCarving.writepgm(tab, nom+"_interest");
 		Graph g = SeamCarving.tograph(tab);
+		g.writeFile(nom+"_graph");
 		
-		ArrayUtils.trace(SeamCarving.Dijkstra(g, 0, 1));
+		SeamCarving.Dijkstra(g, 0, 1);
 		
 	}
 }

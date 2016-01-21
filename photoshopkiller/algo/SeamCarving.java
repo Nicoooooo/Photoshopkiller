@@ -46,7 +46,8 @@ public class SeamCarving
 			for (int height=0; height<image.length; height++){
 				for (int width=0; width<image[0].length; width++){
 					sb.append(image[height][width]+"\t");
-				}	
+				}
+				sb.append("\n");
 			}
 			output.write(sb.toString());
 			output.close();
@@ -102,46 +103,34 @@ public class SeamCarving
 	}
 	
 	public static ArrayList<Edge> Dijkstra(Graph g, int s, int t) {
-		ArrayList<Edge> path = new ArrayList<Edge>();
+		Heap heap = new Heap(g.vertices());
+		int[] previous = new int[g.vertices()];
+		ArrayList<Edge> nexts, path = new ArrayList<Edge>();
+		heap.decreaseKey(s, 0);
 		
-		g.setValue(0, 0);
+		for(int i=0; i<g.vertices(); i++)
+			path.add(null);
 		
-		/**
-		 * Visite de tous les noeuds
-		 */
-		Edge fin = visite(g,s,t,null);
-		
-		path.add(fin);
-		while(fin.parent != null) {
-			fin = fin.parent;
-			path.add(fin);
-		}
-		
-		return path;
-	}
-	
-	public static Edge visite(Graph g, int e, int t, Edge last) {
-		if(e == t) {
-			return last;
-		}
-		
-		Iterable<Edge> nonVisite = g.adj(e);
-		
-		int min = -1;
-		Edge minE = null;
-		for(Edge ed : nonVisite) {
-			boolean jamaisVisite = g.getValue(ed.to) == -1;
-			if(g.getValue(ed.to) == -1 || g.getValue(ed.from) + ed.cost < g.getValue(ed.to)) {
-				g.setValue(ed.to,g.getValue(ed.from)+ed.cost);
-				ed.parent = last;
+		int current = heap.pop(), distance;
+		while(current != t){
+			nexts = (ArrayList<Edge>) g.next(current);
+			for(Edge e:nexts){
+				distance = heap.priority(current) + e.cost;
+				if(distance < heap.priority(e.to)){
+					heap.decreaseKey(e.to, distance);
+					previous[e.to] = current;
+				}
 			}
-			
-			if( jamaisVisite && (g.getValue(ed.to) < min || min == -1) ) {
-				min = g.getValue(ed.to);
-				minE = ed;
-			}
+			current = heap.pop();
 		}
 		
-		return visite(g,minE.to,t,minE);
+		System.out.print("Shortest path (inverted) : ");
+		while(current != s){
+			System.out.print(current+",");
+			current = previous[current];
+		}
+		System.out.println(s);
+		
+		return path;	// Pas encore rempli
 	}
 }

@@ -107,10 +107,7 @@ public class SeamCarving
 		int[] previous = new int[g.vertices()];
 		ArrayList<Edge> nexts, path = new ArrayList<Edge>();
 		heap.decreaseKey(s, 0);
-		
-		for(int i=0; i<g.vertices(); i++)
-			path.add(null);
-		
+				
 		int current = heap.pop(), distance;
 		while(current != t){
 			nexts = (ArrayList<Edge>) g.next(current);
@@ -124,13 +121,16 @@ public class SeamCarving
 			current = heap.pop();
 		}
 		
-		System.out.print("Shortest path (inverted) : ");
 		while(current != s){
-			System.out.print(current+",");
+			nexts = (ArrayList<Edge>) g.adj(current);
+			for(Edge e:nexts){
+				if(e.from == previous[current]){
+					path.add(e);
+				}
+			}
 			current = previous[current];
 		}
-		System.out.println(s);
 		
-		return path;	// Pas encore rempli
+		return path;
 	}
 }

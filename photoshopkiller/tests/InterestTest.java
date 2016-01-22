@@ -1,5 +1,8 @@
 package photoshopkiller.tests;
 
+import java.util.ArrayList;
+
+import photoshopkiller.algo.Edge;
 import photoshopkiller.algo.Graph;
 import photoshopkiller.algo.SeamCarving;
 import photoshopkiller.utils.ArrayUtils;
@@ -15,7 +18,10 @@ public class InterestTest {
 		Graph g = SeamCarving.tograph(tab);
 		g.writeFile(nom+"_graph");
 		
-		SeamCarving.Dijkstra(g, 0, 1);
+		ArrayList<Edge> path = SeamCarving.Dijkstra(g, 0, 1);
+		for(Edge e:path){
+			System.out.print(e.from+"->"+e.to+";");
+		}
 		
 	}
 }

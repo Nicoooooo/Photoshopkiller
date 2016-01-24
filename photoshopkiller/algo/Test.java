@@ -60,8 +60,37 @@ class Test
 	 }
    
    public static void main(String[] args) {
-	   new photoshopkiller.tests.InterestTest();
-	   //testHeap();
-	   //testGraph();
+	   String command = "rmcols", filename = "ex3";
+	   int N = 100;
+	   
+	   if(!(args.length == 3 || args.length == 2)) {
+		   System.out.println("Usage : java -jar photoshopkiller.jar interest <filename>");
+		   System.out.println("     or java -jar photoshopkiller.jar rmcols <filename> <number_of_cols>");
+	   }
+	   
+	   if(args.length == 3) {
+		   command = "rmcols";
+		   filename = args[1];
+		   N = Integer.parseInt(args[2]);
+	   } else if(args.length == 2) {
+		   command = "interest";
+		   filename = args[1];
+	   }
+	   
+	   int[][] tab = SeamCarving.readpgm(filename+".pgm");
+	   int[][] res;
+	   if(command.equals("rmcols")) {
+		   res = SeamCarving.removeCols(tab);
+		   for(int i = 0; i < N; i++) {
+			   res = SeamCarving.removeCols(res);
+			   System.out.print(".");
+		   }
+		   SeamCarving.writepgm(res, filename+"_m"+N);
+	   } else {
+		   res = SeamCarving.interest(tab);
+		   SeamCarving.writepgm(res, filename+"_interrest");
+	   }
+	   
+	   System.out.println("Done !");
 	 }
 }

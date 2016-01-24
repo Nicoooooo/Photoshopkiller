@@ -133,4 +133,37 @@ public class SeamCarving
 		
 		return path;
 	}
+	
+	public static int[][] removeCols(int[][]tab) {
+		if(tab[0].length == 1) {
+			System.out.println("Image.width = 1px !");
+			return tab;
+		}
+		int[][] res = new int[tab.length][tab[0].length-1];
+		
+		Graph g = SeamCarving.tograph(tab);
+		ArrayList<Edge> path = SeamCarving.Dijkstra(g, 0, 1);
+		
+		int im = res.length, jm = res[0].length;
+		for(int i = 0; i < im; i++) {
+			int dec = 0;
+			for(int j = 0; j < jm; j++) {
+				if(SeamCarving.isRemoved(path,i,j)) {
+					dec++;
+				}
+				res[i][j] = tab[i][j+dec];
+			}
+		}
+		
+		return res;
+	}
+	
+	public static boolean isRemoved(ArrayList<Edge> path, int x, int y) {
+		for(Edge e : path) {
+			if(e.from == x && e.to == y) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

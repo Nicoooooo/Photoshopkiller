@@ -9,3 +9,8 @@ Exemple : "java -jar photoshopkiller.jar interest ex1"
 
 Suprimme N colonnes et enregistre le résultat dans le fichier "<nom du fichier>_m<nombre de colonnes>"
 Exemple : "java -jar photoshopkiller.jar rmcols ex1 50"
+
+- **highlight <nom de fichier> <nombre de colonnes> :**
+
+"Surligne" N colonnes et enregistre le résultat dans le fichier "<nom du fichier>_h<nombre de colonnes>"
+Exemple : "java -jar photoshopkiller.jar highlight ex1 50"

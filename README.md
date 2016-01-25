@@ -1,5 +1,5 @@
 # Photoshopkiller
-Deux commandes: 
+Trois commandes: 
 - **interest <nom de fichier> :**
 
 Enregistre le graph d'intérrêt de l'image dans le fichier "<nom du fichier>_interest.pgm"

@@ -1,0 +1,11 @@
+# Photoshopkiller
+Deux commandes: 
+- **interest <nom de fichier> :**
+
+Enregistre le graph d'intérrêt de l'image dans le fichier "<nom du fichier>_interest.pgm"
+Exemple : "java -jar photoshopkiller.jar interest ex1"
+
+- **rmcols <nom de fichier> <nombre de colonnes> :**
+
+Suprimme N colonnes et enregistre le résultat dans le fichier "<nom du fichier>_m<nombre de colonnes>"
+Exemple : "java -jar photoshopkiller.jar rmcols ex1 50"

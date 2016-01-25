@@ -157,6 +157,28 @@ public class SeamCarving
 		return res;
 	}
 	
+	public static int[][] highlightCols(int[][]tab, int[][] res) {
+		if(tab[0].length == 1) {
+			return tab;
+		}
+		
+		Graph g = tograph(tab);
+		ArrayList<Edge> path = Dijkstra(g, 0, 1);
+		
+		int im = res.length, jm = res[0].length;
+		for(int i = 0; i < im; i++) {
+			for(int j = 0; j < jm; j++) {
+				if(isRemoved(path,i,j, tab[0].length)) {
+					res[i][j] = 255;
+				} else {
+					res[i][j] = tab[i][j];
+				}
+			}
+		}
+		
+		return res;
+	}
+	
 	public static boolean isRemoved(ArrayList<Edge> path, int x, int y, int w) {
 		for(Edge e : path) {
 			if(e.to == getEdgeId(w,y,x)) {

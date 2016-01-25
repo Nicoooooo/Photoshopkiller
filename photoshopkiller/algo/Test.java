@@ -61,15 +61,17 @@ class Test
    
    public static void main(String[] args) {
 	   String command = "rmcols", filename = "ex3";
-	   int N = 100;
+	   //command = "highlightcols";
+	   int N = 50;
 	   
 	   if(!(args.length == 3 || args.length == 2)) {
 		   System.out.println("Usage : java -jar photoshopkiller.jar interest <filename>");
 		   System.out.println("     or java -jar photoshopkiller.jar rmcols <filename> <number_of_cols>");
+		   System.out.println("     or java -jar photoshopkiller.jar highlightcols <filename> <number_of_cols>");
 	   }
 	   
 	   if(args.length == 3) {
-		   command = "rmcols";
+		   command = args[0];
 		   filename = args[1];
 		   N = Integer.parseInt(args[2]);
 	   } else if(args.length == 2) {
@@ -81,11 +83,20 @@ class Test
 	   int[][] res;
 	   if(command.equals("rmcols")) {
 		   res = SeamCarving.removeCols(tab);
-		   for(int i = 0; i < N; i++) {
+		   for(int i = 0; i < N - 1; i++) {
 			   res = SeamCarving.removeCols(res);
 			   System.out.print(".");
 		   }
+		   
 		   SeamCarving.writepgm(res, filename+"_m"+N);
+	   } else if(command.equals("highlightcols")) {
+		   res = SeamCarving.removeCols(tab);
+		   for(int i = 0; i < N - 1; i++) {
+			   tab = SeamCarving.highlightCols(tab, res);
+			   System.out.print(".");
+		   }
+		   
+		   SeamCarving.writepgm(res, filename+"_h"+N);
 	   } else {
 		   res = SeamCarving.interest(tab);
 		   SeamCarving.writepgm(res, filename+"_interrest");

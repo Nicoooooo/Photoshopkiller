@@ -1,7 +1,9 @@
 package photoshopkiller.algo;
 import java.util.ArrayList;
+
 import java.io.*;
 import java.util.*;
+
 public class SeamCarving
 {
 	public static int[][] readpgm(String fn) {		
@@ -73,30 +75,37 @@ public class SeamCarving
 		return res;
 	}
 	
-	public static int getEdgeId(int w, int x, int y) {
-		return w * x + y + 2;
-	}
-	
 	public static Graph tograph(int[][] itr) {
 		int width = itr[0].length, height = itr.length;
-		Graph r = new Graph(width*width+height*2);
+		Graph r = new Graph(2*width*height+2);
+		
+		// Edges from start to first line 
 		for(int j = 0; j < width; j++) {
-			r.addEdge(new Edge(0,getEdgeId(width,j,0),0));
+			r.addEdge(new Edge(0,j+2,0));
 		}
 		
 		for(int i = 0; i < width; i++) {
-			for(int j = 0; j < height - 1; j++) {
-				r.addEdge(new Edge(getEdgeId(width,i,j),getEdgeId(width,i,j+1),itr[j][i]));
+			for(int j = 0; j < (height-1)*2; j+=2) {
+				//Edges that go one down
+				r.addEdge(new Edge(j*width+i+2,(j+1)*width+i+2,itr[j/2][i]));
 				
+				//Edges that go one down to the right
 				if(i < width - 1) {
-					r.addEdge(new Edge(getEdgeId(width,i,j),getEdgeId(width,i+1,j+1),itr[j][i]));
+					r.addEdge(new Edge(j*width+i+2,(j+1)*width+i+3,itr[j/2][i]));
 				}
 				
+				//Edges that go one down to the left
 				if(i > 0) {
-					r.addEdge(new Edge(getEdgeId(width,i,j),getEdgeId(width,i-1,j+1),itr[j][i]));
+					r.addEdge(new Edge(j*width+i+2,(j+1)*width+i+1,itr[j/2][i]));
+				}
+				
+				//Edges that cut the vertex below in two vertices with value 0
+				if(j+1 < (height-2)*2) {
+					r.addEdge(new Edge((j+1)*width+i+2,(j+2)*width+i+2,0));	
 				}
 			}
-			r.addEdge(new Edge(getEdgeId(width,i,height-1),1,itr[height-1][i]));
+			// Edges from last line to end
+			r.addEdge(new Edge(((height-2)*2+1)*width+i+2,1,itr[height-1][i]));
 		}
 		
 		return r;

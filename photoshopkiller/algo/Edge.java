@@ -1,4 +1,6 @@
 package photoshopkiller.algo;
+
+
 public class Edge
 {
    public int from;

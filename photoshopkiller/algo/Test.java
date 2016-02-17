@@ -1,7 +1,5 @@
 package photoshopkiller.algo;
 
-import photoshopkiller.tests.InterestTest;
-
 class Test
 {
    static boolean visite[];

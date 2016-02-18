@@ -1,12 +1,12 @@
 package photoshopkiller.algo;
-class Heap
+public class Heap
 {
    int cor[];
    int item[];
    int heap[];
    int size;
    
-    Heap(int N)
+    public Heap(int N)
 	 {
 		cor = new int[N+1];
 		heap = new int[N+1];

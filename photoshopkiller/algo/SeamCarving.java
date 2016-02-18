@@ -1,7 +1,9 @@
 package photoshopkiller.algo;
 import java.util.ArrayList;
+
 import java.io.*;
 import java.util.*;
+
 public class SeamCarving
 {
 	public static int[][] readpgm(String fn) {		
@@ -73,30 +75,37 @@ public class SeamCarving
 		return res;
 	}
 	
-	public static int getEdgeId(int w, int x, int y) {
-		return w * x + y + 2;
-	}
-	
 	public static Graph tograph(int[][] itr) {
 		int width = itr[0].length, height = itr.length;
-		Graph r = new Graph(width*width+height*2);
+		Graph r = new Graph(2*width*height+2);
+		
+		// Edges from start to first line 
 		for(int j = 0; j < width; j++) {
-			r.addEdge(new Edge(0,getEdgeId(width,j,0),0));
+			r.addEdge(new Edge(0,j+2,0));
 		}
 		
 		for(int i = 0; i < width; i++) {
-			for(int j = 0; j < height - 1; j++) {
-				r.addEdge(new Edge(getEdgeId(width,i,j),getEdgeId(width,i,j+1),itr[j][i]));
+			for(int j = 0; j < (height-1)*2; j+=2) {
+				//Edges that go one down
+				r.addEdge(new Edge(j*width+i+2,(j+1)*width+i+2,itr[j/2][i]));
 				
+				//Edges that go one down to the right
 				if(i < width - 1) {
-					r.addEdge(new Edge(getEdgeId(width,i,j),getEdgeId(width,i+1,j+1),itr[j][i]));
+					r.addEdge(new Edge(j*width+i+2,(j+1)*width+i+3,itr[j/2][i]));
 				}
 				
+				//Edges that go one down to the left
 				if(i > 0) {
-					r.addEdge(new Edge(getEdgeId(width,i,j),getEdgeId(width,i-1,j+1),itr[j][i]));
+					r.addEdge(new Edge(j*width+i+2,(j+1)*width+i+1,itr[j/2][i]));
+				}
+				
+				//Edges that cut the vertex below in two vertices with value 0
+				if(j+1 < (height-2)*2) {
+					r.addEdge(new Edge((j+1)*width+i+2,(j+2)*width+i+2,0));	
 				}
 			}
-			r.addEdge(new Edge(getEdgeId(width,i,height-1),1,itr[height-1][i]));
+			// Edges from last line to end
+			r.addEdge(new Edge(((height-2)*2+1)*width+i+2,1,itr[height-1][i]));
 		}
 		
 		return r;
@@ -133,7 +142,8 @@ public class SeamCarving
 		
 		return path;
 	}
-	
+
+	/*
 	public static int[][] removeCols(int[][]tab) {
 		if(tab[0].length == 1) {
 			return tab;
@@ -142,6 +152,7 @@ public class SeamCarving
 		
 		Graph g = tograph(tab);
 		ArrayList<Edge> path = Dijkstra(g, 0, 1);
+		
 		
 		int im = res.length, jm = res[0].length;
 		for(int i = 0; i < im; i++) {
@@ -186,5 +197,68 @@ public class SeamCarving
 			}
 		}
 		return false;
+	}*/
+	
+	public static void findAllShortestsWays(Graph g, int s) {
+		Heap heap = new Heap(g.vertices());
+		ArrayList<Edge> nexts = new ArrayList<Edge>();
+		heap.decreaseKey(s, 0);
+		g.setValue(s, 0);
+				
+		int current = heap.pop(), distance;
+		while(!heap.isEmpty()){
+			nexts = (ArrayList<Edge>) g.next(current);
+			for(Edge e:nexts){
+				distance = heap.priority(current) + e.cost;
+				if(distance < heap.priority(e.to)){
+					heap.decreaseKey(e.to, distance);
+					g.setValue(e.to, distance);
+				}
+			}	
+			current = heap.pop();
+		}
+	}
+	
+	public static ArrayList<Edge> twopath(Graph g, int s, int t){
+		findAllShortestsWays(g,0);
+		
+		//Modify the edges values
+		for(Edge e: g.edges()){
+			e.cost += g.getValue(e.from) - g.getValue(e.to);
+		}
+		
+		//Find the first shortest way and inverse it
+		ArrayList<Edge> path = Dijkstra(g, s, t);
+		for(Edge e: path){
+			int tmp = e.to;
+			e.to = e.from;
+			e.from = tmp;
+		}
+		
+		//Find shortest way in the resulting graph
+		ArrayList<Edge> secondPath = Dijkstra(g, s, t);
+		
+		//Remove common edges
+		Iterator<Edge> pathIte = path.iterator();
+		while(pathIte.hasNext()){
+			Edge e = pathIte.next();
+			Iterator<Edge> secondPathIte = secondPath.iterator();
+			while(secondPathIte.hasNext()){
+				Edge f = secondPathIte.next();
+				if(e.from == f.from && e.to == f.to){
+					pathIte.remove();
+					secondPathIte.remove();
+				}
+			}
+		}
+		
+		//Reverse the remaining from the first path
+		for(Edge e: path){
+			int tmp = e.to;
+			e.to = e.from;
+			e.from = tmp;
+		}
+		path.addAll(secondPath);
+		return path;
 	}
 }

@@ -16,7 +16,7 @@ Exemple : "java -jar photoshopkiller.jar rmcols ex1 50"
 Exemple : "java -jar photoshopkiller.jar highlight ex1 50"
 
 
-#Le travail à été réparti de la façon suivante :
+#Le travail a Ã©tÃ© rÃ©parti de la faÃ§on suivante :
 
-writepgm et dijkstra par Yann
-interest, toGraph et le logiciel par Nicolas
+writepgm et dijkstra par Yann Bernard
+interest, toGraph et le logiciel par Nicolas Gauville

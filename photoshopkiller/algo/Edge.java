@@ -6,7 +6,6 @@ public class Edge
    public int from;
    public int to;
    int cost;
-   Edge parent;
    
    Edge(int x, int y, int cost)
 	 {

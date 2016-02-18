@@ -143,7 +143,6 @@ public class SeamCarving
 		return path;
 	}
 
-	/*
 	public static int[][] removeCols(int[][]tab) {
 		if(tab[0].length == 1) {
 			return tab;
@@ -152,7 +151,6 @@ public class SeamCarving
 		
 		Graph g = tograph(tab);
 		ArrayList<Edge> path = Dijkstra(g, 0, 1);
-		
 		
 		int im = res.length, jm = res[0].length;
 		for(int i = 0; i < im; i++) {
@@ -170,12 +168,12 @@ public class SeamCarving
 	
 	public static boolean isRemoved(ArrayList<Edge> path, int x, int y, int w) {
 		for(Edge e : path) {
-			if(e.to == getEdgeId(w,y,x)) {
+			if(e.to == y*w + x + 2) {
 				return true;
 			}
 		}
 		return false;
-	}*/
+	}
 	
 	public static void findAllShortestsWays(Graph g, int s) {
 		Heap heap = new Heap(g.vertices());

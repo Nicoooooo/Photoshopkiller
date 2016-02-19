@@ -84,24 +84,22 @@ class Test
 		   }		   
 		   SeamCarving.writepgm(tab, filename+"_rmcols-"+N);
 	   } else if(command.equals("addcols")) {
-		   tab = SeamCarving.addCols(tab);
-		   for(int i = 0; i < N - 1; i++) {
+		   for(int i = 0; i < N; i++) {
 			   tab = SeamCarving.addCols(tab);
 			   System.out.print(".");
 		   }
 		   
 		   SeamCarving.writepgm(tab, filename+"_addcols-"+N);
 	   } else if(command.equals("highlightcols")) {
-		   tab = SeamCarving.removeCols(tab);
-		   for(int i = 0; i < N - 1; i++) {
+		   for(int i = 0; i < N; i++) {
 			   tab = SeamCarving.highlightCols(tab, tab);
 			   System.out.print(".");
 		   }
 		   
-		   SeamCarving.writepgm(tab, filename+"_highliht"+N);
+		   SeamCarving.writepgm(tab, filename+"_highlight"+N);
 	   } else {
-		   tab = SeamCarving.intetabt(tab);
-		   SeamCarving.writepgm(tab, filename+"_intertabt");
+		   tab = SeamCarving.interest(tab);
+		   SeamCarving.writepgm(tab, filename+"_interest");
 	   }
 	   
 	   System.out.println("Done !");

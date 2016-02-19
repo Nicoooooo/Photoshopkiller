@@ -111,21 +111,19 @@ public class SeamCarving
 		return r;
 	}
 	
-	public static ArrayList<Edge> Dijkstra(Graph g, int s, int t, boolean findAll) {
+	public static ArrayList<Edge> Dijkstra(Graph g, int s, int t) {
 		Heap heap = new Heap(g.vertices());
 		int[] previous = new int[g.vertices()];
 		ArrayList<Edge> nexts, path = new ArrayList<Edge>();
 		heap.decreaseKey(s, 0);
-		g.setValue(s, 0);
 				
 		int current = heap.pop(), distance;
-		while(current != t && ((!findAll) || heap.isEmpty())){
+		while(current != t){
 			nexts = (ArrayList<Edge>) g.next(current);
 			for(Edge e:nexts){
 				distance = heap.priority(current) + e.cost;
 				if(distance < heap.priority(e.to)){
 					heap.decreaseKey(e.to, distance);
-					g.setValue(e.to, distance);
 					previous[e.to] = current;
 				}
 			}
@@ -151,7 +149,7 @@ public class SeamCarving
 		int[][] res = new int[tab.length][tab[0].length-1];
 		
 		Graph g = tograph(interest(tab));
-		ArrayList<Edge> path = Dijkstra(g, 0, 1, false);
+		ArrayList<Edge> path = Dijkstra(g, 0, 1);
 				
 		int width = res[0].length, height = res.length;
 		int vertexRemoved = 0, posRemoved;
@@ -217,7 +215,7 @@ public class SeamCarving
 		int[][] res = new int[tab.length][tab[0].length + 1];
 		
 		Graph g = tograph(interest(tab));
-		ArrayList<Edge> path = Dijkstra(g, 0, 1, false);
+		ArrayList<Edge> path = Dijkstra(g, 0, 1);
 		
 		int width = res[0].length, height = res.length;
 		int vertexRemoved = 0, posRemoved;
@@ -243,7 +241,7 @@ public class SeamCarving
 		}
 		
 		Graph g = tograph(interest(tab));
-		ArrayList<Edge> path = Dijkstra(g, 0, 1, false);
+		ArrayList<Edge> path = Dijkstra(g, 0, 1);
 		
 		int width = res[0].length, height = res.length;
 		int vertexRemoved = 0, posRemoved;
@@ -295,7 +293,7 @@ public class SeamCarving
 	}
 	
 	public static ArrayList<Edge> twopath(Graph g, int s, int t){
-		ArrayList<Edge> path = Dijkstra(g, s, t, true);
+		findAllShortestsWays(g,s);
 		
 		//Modify the edges values
 		for(Edge e: g.edges()){
@@ -305,6 +303,7 @@ public class SeamCarving
 		}
 		
 		//Inverse the first shortest way
+		ArrayList<Edge> path = Dijkstra(g, s, t);
 		for(Edge e: path){
 			int tmp = e.to;
 			e.to = e.from;
@@ -312,7 +311,7 @@ public class SeamCarving
 		}
 		
 		//Find shortest way in the resulting graph
-		ArrayList<Edge> secondPath = Dijkstra(g, s, t, false);
+		ArrayList<Edge> secondPath = Dijkstra(g, s, t);
 		
 		//Remove common edges
 		Iterator<Edge> pathIte = path.iterator();

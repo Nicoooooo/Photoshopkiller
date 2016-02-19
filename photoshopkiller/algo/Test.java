@@ -101,7 +101,7 @@ class Test
 			   System.out.print(".");
 		   }
 		   
-		   SeamCarving.writepgm(res, filename+"_h"+N);
+		   SeamCarving.writepgm(res, filename+"_highliht"+N);
 	   } else {
 		   res = SeamCarving.interest(tab);
 		   SeamCarving.writepgm(res, filename+"_interrest");

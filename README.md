@@ -2,21 +2,20 @@
 Trois commandes: 
 - **interest <nom de fichier> :**
 
-Enregistre le graph d'intérrêt de l'image dans le fichier "<nom du fichier>_interest.pgm"
+Enregistre le graph d'intÃ©rrÃªt de l'image dans le fichier "<nom du fichier>_interest.pgm"
 Exemple : "java -jar photoshopkiller.jar interest ex1"
 
 - **rmcols <nom de fichier> <nombre de colonnes> :**
 
-Suprimme N colonnes et enregistre le résultat dans le fichier "<nom du fichier>_m<nombre de colonnes>"
+Suprimme N colonnes et enregistre le rÃ©sultat dans le fichier "<nom du fichier>_rmcols-<nombre de colonnes>"
 Exemple : "java -jar photoshopkiller.jar rmcols ex1 50"
 
-- **highlight <nom de fichier> <nombre de colonnes> :**
+- **addcols <nom de fichier> <nombre de colonnes> :**
 
-"Surligne" N colonnes et enregistre le résultat dans le fichier "<nom du fichier>_h<nombre de colonnes>"
-Exemple : "java -jar photoshopkiller.jar highlight ex1 50"
+Ajoute N colonnes et enregistre le rÃ©sultat dans le fichier "<nom du fichier>_addcols-<nombre de colonnes>"
+Exemple : "java -jar photoshopkiller.jar addcols ex1 50"
 
-
-#Le travail � �t� r�parti de la fa�on suivante :
+#Le travail à été réparti de la façon suivante :
 
 writepgm et dijkstra par Yann
 interest, toGraph et le logiciel par Nicolas

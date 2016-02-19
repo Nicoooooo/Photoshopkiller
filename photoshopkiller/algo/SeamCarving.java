@@ -111,19 +111,21 @@ public class SeamCarving
 		return r;
 	}
 	
-	public static ArrayList<Edge> Dijkstra(Graph g, int s, int t) {
+	public static ArrayList<Edge> Dijkstra(Graph g, int s, int t, boolean findAll) {
 		Heap heap = new Heap(g.vertices());
 		int[] previous = new int[g.vertices()];
 		ArrayList<Edge> nexts, path = new ArrayList<Edge>();
 		heap.decreaseKey(s, 0);
+		g.setValue(s, 0);
 				
 		int current = heap.pop(), distance;
-		while(current != t){
+		while(current != t && (!findAll || !heap.isEmpty())){
 			nexts = (ArrayList<Edge>) g.next(current);
 			for(Edge e:nexts){
 				distance = heap.priority(current) + e.cost;
 				if(distance < heap.priority(e.to)){
 					heap.decreaseKey(e.to, distance);
+					g.setValue(e.to, distance);
 					previous[e.to] = current;
 				}
 			}
@@ -149,11 +151,13 @@ public class SeamCarving
 		int[][] res = new int[tab.length][tab[0].length-1];
 		
 		Graph g = tograph(interest(tab));
-		ArrayList<Edge> path = Dijkstra(g, 0, 1);
+		ArrayList<Edge> path = Dijkstra(g, 0, 1, false);
 				
 		int width = res[0].length, height = res.length;
 		int vertexRemoved = 0, posRemoved;
 		for(int y = 0; y < height; y++) {
+			if(y >= 1 && y < height-1) // removes the 0 cost edge in one vertex
+				vertexRemoved = nextRemovedVertex(path, vertexRemoved);
 			vertexRemoved = nextRemovedVertex(path, vertexRemoved);
 			posRemoved = (vertexRemoved-2)%(width+1);
 			for(int x = 0; x < posRemoved; x++){
@@ -167,21 +171,65 @@ public class SeamCarving
 		return res;
 	}
 	
+	public static int[][] removeTwoCols(int[][]tab) {
+		if(tab.length == 1) {
+			return tab;
+		}
+		int[][] res = new int[tab.length][tab[0].length-2];
+		
+		Graph g = tograph(interest(tab));
+		ArrayList<Edge> path = twopath(g, 0, 1);			
+				
+		int width = res[0].length, height = res.length;
+		int vertex1Removed = 0, pos1Removed;
+		int vertex2Removed = 0, pos2Removed;
+		for(int y = 0; y < height; y++) {
+			if(y >= 1 && y < height-1){ // removes the 0 cost edge in one vertex
+				vertex1Removed = nextRemovedVertex(path, vertex1Removed);
+				vertex2Removed = nextRemovedVertex(path, vertex2Removed);
+			}
+			vertex1Removed = nextRemovedVertex(path, vertex1Removed);
+			vertex2Removed = nextRemovedVertex(path, vertex2Removed);
+			pos1Removed = (vertex1Removed-2)%(width+2);
+			pos2Removed = (vertex2Removed-2)%(width+2);
+			
+			if(pos1Removed > pos2Removed){ // pos1 is the min, pos2 the max
+				int tmp = pos1Removed;
+				pos1Removed = pos2Removed;
+				pos2Removed = tmp;
+			}
+			
+			for(int x = 0; x < pos1Removed; x++){
+				res[y][x] = tab[y][x];
+			}
+			for(int x = pos1Removed; x < pos2Removed-1; x++){
+				res[y][x] = tab[y][x+1];
+			}
+			for(int x = pos2Removed-1; x < width; x++){
+				res[y][x] = tab[y][x+2];
+			}
+		}
+		
+		return res;
+	}
+	
 	public static int[][] addCols(int[][]tab) {
 		int[][] res = new int[tab.length][tab[0].length + 1];
 		
 		Graph g = tograph(interest(tab));
-		ArrayList<Edge> path = Dijkstra(g, 0, 1);
+		ArrayList<Edge> path = Dijkstra(g, 0, 1, false);
 		
 		int width = res[0].length, height = res.length;
 		int vertexRemoved = 0, posRemoved;
 		for(int y = 0; y < height; y++) {
+			if(y >= 1 && y < height-1) // removes the 0 cost edge in one vertex
+				vertexRemoved = nextRemovedVertex(path, vertexRemoved);
 			vertexRemoved = nextRemovedVertex(path, vertexRemoved);
-			posRemoved = (vertexRemoved-2)%(width+1);
-			for(int x = 0; x < posRemoved; x++){
+			posRemoved = (vertexRemoved-2)%(width-1);
+			for(int x = 0; x <= posRemoved; x++){
 				res[y][x] = tab[y][x];
 			}
-			for(int x = posRemoved; x < width; x++){
+			for(int x = posRemoved+1; x < width; x++){
 				res[y][x] = tab[y][x-1];
 			}
 		}
@@ -194,17 +242,19 @@ public class SeamCarving
 			return tab;
 		}
 		
-		Graph g = tograph(tab);
-		ArrayList<Edge> path = Dijkstra(g, 0, 1);
+		Graph g = tograph(interest(tab));
+		ArrayList<Edge> path = Dijkstra(g, 0, 1, false);
 		
 		int width = res[0].length, height = res.length;
 		int vertexRemoved = 0, posRemoved;
 		for(int y = 0; y < height; y++) {
+			if(y >= 1 && y < height-1) // removes the 0 cost edge in one vertex
+				vertexRemoved = nextRemovedVertex(path, vertexRemoved);
 			vertexRemoved = nextRemovedVertex(path, vertexRemoved);
-			posRemoved = (vertexRemoved-2)%(width+1);
+			posRemoved = (vertexRemoved-2)%width;
 			for(int x = 0; x < width; x++){
 				if(x == posRemoved) {
-					res[x][y] = 255;
+					res[y][x] = 255;
 				}
 				res[y][x] = tab[y][x];
 			}
@@ -245,15 +295,14 @@ public class SeamCarving
 	}
 	
 	public static ArrayList<Edge> twopath(Graph g, int s, int t){
-		findAllShortestsWays(g,0);
+		ArrayList<Edge> path = Dijkstra(g, s, t, true);
 		
 		//Modify the edges values
 		for(Edge e: g.edges()){
 			e.cost += g.getValue(e.from) - g.getValue(e.to);
 		}
 		
-		//Find the first shortest way and inverse it
-		ArrayList<Edge> path = Dijkstra(g, s, t);
+		//Inverse the first shortest way
 		for(Edge e: path){
 			int tmp = e.to;
 			e.to = e.from;
@@ -261,7 +310,7 @@ public class SeamCarving
 		}
 		
 		//Find shortest way in the resulting graph
-		ArrayList<Edge> secondPath = Dijkstra(g, s, t);
+		ArrayList<Edge> secondPath = Dijkstra(g, s, t, false);
 		
 		//Remove common edges
 		Iterator<Edge> pathIte = path.iterator();

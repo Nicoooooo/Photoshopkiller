@@ -62,7 +62,7 @@ class Test
 	   int N = 50;
 	   
 	   if(!(args.length == 3 || args.length == 2)) {
-		   System.out.println("Usage : java -jar photoshopkiller.jar intetabt <filename>");
+		   System.out.println("Usage : java -jar photoshopkiller.jar interest <filename>");
 		   System.out.println("     or java -jar photoshopkiller.jar rmcols <filename> <number_of_cols>");
 		   System.out.println("     or java -jar photoshopkiller.jar highlightcols <filename> <number_of_cols>");
 	   }
@@ -77,31 +77,47 @@ class Test
 	   }
 	   
 	   int[][] tab = SeamCarving.readpgm(filename+".pgm");
+	   
 	   if(command.equals("rmcols")) {
 		   for(int i = 0; i < N; i++) {
 			   tab = SeamCarving.removeCols(tab);
 			   System.out.print(".");
 		   }		   
 		   SeamCarving.writepgm(tab, filename+"_rmcols-"+N);
+		   System.out.println("Done !");
+
+	   } else if(command.equals("rm2cols")) {
+		   for(int i = 0; i < N/2; i++) {
+			   tab = SeamCarving.removeTwoCols(tab);
+			   System.out.print(".");
+		   }
+		   SeamCarving.writepgm(tab, filename+"_rm2cols-"+(N/2)*2);	   
+		   System.out.println("Done !");
+		   
 	   } else if(command.equals("addcols")) {
 		   for(int i = 0; i < N; i++) {
 			   tab = SeamCarving.addCols(tab);
 			   System.out.print(".");
-		   }
-		   
+		   }		   
 		   SeamCarving.writepgm(tab, filename+"_addcols-"+N);
+		   System.out.println("Done !");
+
 	   } else if(command.equals("highlightcols")) {
+		   int[][] tmp = new int[tab.length][tab[0].length];
 		   for(int i = 0; i < N; i++) {
-			   tab = SeamCarving.highlightCols(tab, tab);
+			   tab = SeamCarving.highlightCols(tmp, tab);
 			   System.out.print(".");
 		   }
-		   
 		   SeamCarving.writepgm(tab, filename+"_highlight"+N);
-	   } else {
+		   System.out.println("Done !");
+		   
+	   } else if(command.equals("interest")) {
 		   tab = SeamCarving.interest(tab);
 		   SeamCarving.writepgm(tab, filename+"_interest");
+		   System.out.println("Done !");
+		   
+	   } else {
+		   System.out.println("Incorrect command");
 	   }
-	   
-	   System.out.println("Done !");
-	 }
+   }
 }

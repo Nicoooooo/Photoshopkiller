@@ -76,17 +76,15 @@ class Test
 	   }
 	   
 	   int[][] tab = SeamCarving.readpgm(filename+".pgm");
-	   int[][] res;
 	   if(command.equals("rmcols")) {
-		   res = SeamCarving.removeCols(tab);
 		   for(int i = 0; i < N; i++) {
-			   res = SeamCarving.removeCols(res);
+			   tab = SeamCarving.removeCols(tab);
 			   System.out.print(".");
 		   }
-		   SeamCarving.writepgm(res, filename+"_m"+N);
+		   SeamCarving.writepgm(tab, filename+"_m"+N);
 	   } else {
-		   res = SeamCarving.interest(tab);
-		   SeamCarving.writepgm(res, filename+"_interrest");
+		   tab = SeamCarving.interest(tab);
+		   SeamCarving.writepgm(tab, filename+"_interrest");
 	   }
 	   
 	   System.out.println("Done !");

@@ -139,40 +139,45 @@ public class SeamCarving
 			}
 			current = previous[current];
 		}
-		
 		return path;
 	}
 
 	public static int[][] removeCols(int[][]tab) {
-		if(tab[0].length == 1) {
+		if(tab.length == 1) {
 			return tab;
 		}
 		int[][] res = new int[tab.length][tab[0].length-1];
 		
+		tab = interest(tab);
 		Graph g = tograph(tab);
 		ArrayList<Edge> path = Dijkstra(g, 0, 1);
-		
-		int im = res.length, jm = res[0].length;
-		for(int i = 0; i < im; i++) {
-			int dec = 0;
-			for(int j = 0; j < jm; j++) {
-				if(isRemoved(path,i,j, tab[0].length)) {
-					dec = 1;
-				}
-				res[i][j] = tab[i][j+dec];
+				
+		int width = res[0].length, height = res.length;
+		int vertexRemoved = 0, posRemoved;
+		for(int y = 0; y < height; y++) {
+			vertexRemoved = nextRemovedVertex(path, vertexRemoved);
+			posRemoved = (vertexRemoved-2)%width;
+			for(int x = 0; x < posRemoved; x++){
+				res[y][x] = tab[y][x];
+			}
+			for(int x = posRemoved; x < width; x++){
+				res[y][x] = tab[y][x+1];
 			}
 		}
 		
 		return res;
 	}
 	
-	public static boolean isRemoved(ArrayList<Edge> path, int x, int y, int w) {
-		for(Edge e : path) {
-			if(e.to == y*w + x + 2) {
-				return true;
+	public static int nextRemovedVertex(ArrayList<Edge> path, int s) {
+		Iterator<Edge> ite = path.iterator();
+		while(ite.hasNext()) {
+			Edge e = ite.next();
+			if (e.from == s){
+				ite.remove();
+				return e.to;
 			}
 		}
-		return false;
+		return -1;
 	}
 	
 	public static void findAllShortestsWays(Graph g, int s) {

@@ -75,6 +75,19 @@ public class SeamCarving
 		return res;
 	}
 	
+	public static int[][] inverse (int[][] image) {
+		int width = image[0].length, height = image.length;
+		int[][] res = new int[height][width];
+		
+		for(int i = 0; i < height; i++) {
+			for(int j = 0; j < width; j++) {
+				res[i][j] = 100 - image[i][j];
+			}
+		}
+		
+		return res;
+	}
+	
 	public static Graph tograph(int[][] itr) {
 		int width = itr[0].length, height = itr.length;
 		Graph r = new Graph(2*width*height+2);
@@ -216,7 +229,7 @@ public class SeamCarving
 	public static int[][] addCols(int[][]tab) {
 		int[][] res = new int[tab.length][tab[0].length + 1];
 		
-		Graph g = tograph(interest(tab));
+		Graph g = tograph(inverse(interest(tab)));
 		ArrayList<Edge> path = Dijkstra(g, 0, 1, false);
 		
 		int width = res[0].length, height = res.length;

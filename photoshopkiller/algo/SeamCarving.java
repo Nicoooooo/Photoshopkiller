@@ -119,7 +119,7 @@ public class SeamCarving
 		g.setValue(s, 0);
 				
 		int current = heap.pop(), distance;
-		while(current != t && (!findAll || !heap.isEmpty())){
+		while(current != t && ((!findAll) || heap.isEmpty())){
 			nexts = (ArrayList<Edge>) g.next(current);
 			for(Edge e:nexts){
 				distance = heap.priority(current) + e.cost;
@@ -300,6 +300,8 @@ public class SeamCarving
 		//Modify the edges values
 		for(Edge e: g.edges()){
 			e.cost += g.getValue(e.from) - g.getValue(e.to);
+			if (e.cost < 0)
+				System.out.println(""+g.getValue(e.from) +";"+ g.getValue(e.to));
 		}
 		
 		//Inverse the first shortest way

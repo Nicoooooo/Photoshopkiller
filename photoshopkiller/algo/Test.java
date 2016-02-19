@@ -24,7 +24,7 @@ class Test
 		// 2 -> 3
 		// 3 -> 8
 		// 4 -> 5
-		// tout le reste -> +infini
+		// tout le tabte -> +infini
 		int x=  h.pop();
 		System.out.println("On a enlevé "+x+" de la file, dont la priorité était " + h.priority(x));
 		x=  h.pop();
@@ -59,19 +59,20 @@ class Test
    
    public static void main(String[] args) {
 	   String command = "rmcols", filename = "ex3";
-	   int N = 100;
+	   int N = 50;
 	   
 	   if(!(args.length == 3 || args.length == 2)) {
-		   System.out.println("Usage : java -jar photoshopkiller.jar interest <filename>");
+		   System.out.println("Usage : java -jar photoshopkiller.jar intetabt <filename>");
 		   System.out.println("     or java -jar photoshopkiller.jar rmcols <filename> <number_of_cols>");
+		   System.out.println("     or java -jar photoshopkiller.jar highlightcols <filename> <number_of_cols>");
 	   }
 	   
 	   if(args.length == 3) {
-		   command = "rmcols";
+		   command = args[0];
 		   filename = args[1];
 		   N = Integer.parseInt(args[2]);
 	   } else if(args.length == 2) {
-		   command = "interest";
+		   command = "intetabt";
 		   filename = args[1];
 	   }
 	   
@@ -80,11 +81,27 @@ class Test
 		   for(int i = 0; i < N; i++) {
 			   tab = SeamCarving.removeCols(tab);
 			   System.out.print(".");
+		   }		   
+		   SeamCarving.writepgm(tab, filename+"_rmcols-"+N);
+	   } else if(command.equals("addcols")) {
+		   tab = SeamCarving.addCols(tab);
+		   for(int i = 0; i < N - 1; i++) {
+			   tab = SeamCarving.addCols(tab);
+			   System.out.print(".");
 		   }
-		   SeamCarving.writepgm(tab, filename+"_m"+N);
+		   
+		   SeamCarving.writepgm(tab, filename+"_addcols-"+N);
+	   } else if(command.equals("highlightcols")) {
+		   tab = SeamCarving.removeCols(tab);
+		   for(int i = 0; i < N - 1; i++) {
+			   tab = SeamCarving.highlightCols(tab, tab);
+			   System.out.print(".");
+		   }
+		   
+		   SeamCarving.writepgm(tab, filename+"_highliht"+N);
 	   } else {
-		   tab = SeamCarving.interest(tab);
-		   SeamCarving.writepgm(tab, filename+"_interrest");
+		   tab = SeamCarving.intetabt(tab);
+		   SeamCarving.writepgm(tab, filename+"_intertabt");
 	   }
 	   
 	   System.out.println("Done !");

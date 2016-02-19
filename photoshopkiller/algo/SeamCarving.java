@@ -155,7 +155,7 @@ public class SeamCarving
 		int vertexRemoved = 0, posRemoved;
 		for(int y = 0; y < height; y++) {
 			vertexRemoved = nextRemovedVertex(path, vertexRemoved);
-			posRemoved = (vertexRemoved-2)%width;
+			posRemoved = (vertexRemoved-2)%(width+1);
 			for(int x = 0; x < posRemoved; x++){
 				res[y][x] = tab[y][x];
 			}

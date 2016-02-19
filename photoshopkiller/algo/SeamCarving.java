@@ -173,14 +173,16 @@ public class SeamCarving
 		Graph g = tograph(interest(tab));
 		ArrayList<Edge> path = Dijkstra(g, 0, 1);
 		
-		int im = res.length, jm = res[0].length;
-		for(int i = 0; i < im; i++) {
-			int dec = 0;
-			for(int j = 0; j < jm; j++) {
-				if(isRemoved(path,i,j, tab[0].length) || j == tab[i].length) {
-					dec = 1;
-				}
-				res[i][j] = tab[i][j-dec];
+		int width = res[0].length, height = res.length;
+		int vertexRemoved = 0, posRemoved;
+		for(int y = 0; y < height; y++) {
+			vertexRemoved = nextRemovedVertex(path, vertexRemoved);
+			posRemoved = (vertexRemoved-2)%(width+1);
+			for(int x = 0; x < posRemoved; x++){
+				res[y][x] = tab[y][x];
+			}
+			for(int x = posRemoved; x < width; x++){
+				res[y][x] = tab[y][x-1];
 			}
 		}
 		
@@ -195,17 +197,18 @@ public class SeamCarving
 		Graph g = tograph(tab);
 		ArrayList<Edge> path = Dijkstra(g, 0, 1);
 		
-		int im = res.length, jm = res[0].length;
-		for(int i = 0; i < im; i++) {
-			for(int j = 0; j < jm; j++) {
-				if(isRemoved(path,i,j, tab[0].length)) {
-					res[i][j] = 255;
-				} else {
-					res[i][j] = tab[i][j];
+		int width = res[0].length, height = res.length;
+		int vertexRemoved = 0, posRemoved;
+		for(int y = 0; y < height; y++) {
+			vertexRemoved = nextRemovedVertex(path, vertexRemoved);
+			posRemoved = (vertexRemoved-2)%(width+1);
+			for(int x = 0; x < width; x++){
+				if(x == posRemoved) {
+					res[x][y] = 255;
 				}
+				res[y][x] = tab[y][x];
 			}
 		}
-		
 		return res;
 	}
 	

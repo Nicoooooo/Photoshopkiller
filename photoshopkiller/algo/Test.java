@@ -71,11 +71,7 @@ class Test
 		   command = args[0];
 		   filename = args[1];
 		   N = Integer.parseInt(args[2]);
-	   } else if(args.length == 2) {
-		   command = "intetabt";
-		   filename = args[1];
 	   }
-	   
 	   int[][] tab = SeamCarving.readpgm(filename+".pgm");
 	   
 	   if(command.equals("rmcols")) {

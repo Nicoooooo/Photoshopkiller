@@ -17,5 +17,5 @@ Exemple : "java -jar photoshopkiller.jar addcols ex1 50"
 
 #Le travail à été réparti de la façon suivante :
 
-writepgm et dijkstra par Yann
-interest, toGraph et le logiciel par Nicolas
+writepgm, dijkstra, rm2cols par Yann
+interest, toGraph, addcols et le logiciel par Nicolas

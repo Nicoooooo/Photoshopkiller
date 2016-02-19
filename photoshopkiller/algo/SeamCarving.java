@@ -148,8 +148,7 @@ public class SeamCarving
 		}
 		int[][] res = new int[tab.length][tab[0].length-1];
 		
-		tab = interest(tab);
-		Graph g = tograph(tab);
+		Graph g = tograph(interest(tab));
 		ArrayList<Edge> path = Dijkstra(g, 0, 1);
 				
 		int width = res[0].length, height = res.length;

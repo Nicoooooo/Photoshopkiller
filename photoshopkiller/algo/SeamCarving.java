@@ -166,6 +166,26 @@ public class SeamCarving
 		return res;
 	}
 	
+	public static int[][] addCols(int[][]tab) {
+		int[][] res = new int[tab.length][tab[0].length + 1];
+		
+		Graph g = tograph(tab);
+		ArrayList<Edge> path = Dijkstra(g, 0, 1);
+		
+		int im = res.length, jm = res[0].length;
+		for(int i = 0; i < im; i++) {
+			int dec = 0;
+			for(int j = 0; j < jm; j++) {
+				if(isRemoved(path,i,j, tab[0].length) || j == tab[i].length) {
+					dec = 1;
+				}
+				res[i][j] = tab[i][j-dec];
+			}
+		}
+		
+		return res;
+	}
+	
 	public static int[][] highlightCols(int[][]tab, int[][] res) {
 		if(tab[0].length == 1) {
 			return tab;

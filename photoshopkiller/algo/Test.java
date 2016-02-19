@@ -59,7 +59,6 @@ class Test
    
    public static void main(String[] args) {
 	   String command = "rmcols", filename = "ex3";
-	   //command = "highlightcols";
 	   int N = 50;
 	   
 	   if(!(args.length == 3 || args.length == 2)) {
@@ -86,7 +85,15 @@ class Test
 			   System.out.print(".");
 		   }
 		   
-		   SeamCarving.writepgm(res, filename+"_m"+N);
+		   SeamCarving.writepgm(res, filename+"_rmcols-"+N);
+	   } else if(command.equals("addcols")) {
+		   res = SeamCarving.addCols(tab);
+		   for(int i = 0; i < N - 1; i++) {
+			   res = SeamCarving.addCols(res);
+			   System.out.print(".");
+		   }
+		   
+		   SeamCarving.writepgm(res, filename+"_addcols-"+N);
 	   } else if(command.equals("highlightcols")) {
 		   res = SeamCarving.removeCols(tab);
 		   for(int i = 0; i < N - 1; i++) {
